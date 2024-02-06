@@ -1,5 +1,5 @@
 import random
-from cell import Cell
+from cell import Cell, CellState
 from enum import Enum
 
 
@@ -54,12 +54,30 @@ class Minefield:
                     queue.append(point)
 
     def flag_cell(self, x, y):
+        # TODO: check if we have flags left
         cell = self.get_cell(x, y)
         cell.toggle_flag()
 
-    # TODO: return a GameState enum
-    def get_game_state(self):
-        pass
+    def get_game_state(self) -> GameState:
+        total_count = self.size * self.size
+        flagged_count = 0
+        open_count = 0
+        for x in range(self.size):
+            for y in range(self.size):
+                cell = self.get_cell(x, y)
+                if cell.state == CellState.OPEN:
+                    if cell.has_mine:
+                        return GameState.LOST
+
+                    open_count += 1
+                elif cell.state == CellState.FLAGGED:
+                    flagged_count += 1
+
+        if open_count + flagged_count == total_count:
+            return GameState.WON
+
+        return GameState.IN_PROGRESS
+
 
     def get_number_of_mines_around_cell(self, x, y) -> int:
         neighboring_points = self.get_neighboring_points(x, y)
