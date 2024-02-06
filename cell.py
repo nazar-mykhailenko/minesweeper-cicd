@@ -6,8 +6,8 @@ class CellState(Enum):
     FLAGGED = 2
 
 class Cell:
-    def __init__(self, hasBomb):
-        self.hasBomb = hasBomb
+    def __init__(self, has_bomb):
+        self.has_bomb = has_bomb
         self.state = CellState.CLOSED
 
     def try_open(self) -> bool:
