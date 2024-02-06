@@ -15,12 +15,12 @@ class Cell:
             return False
 
         self.state = CellState.OPEN
-        return False
+        return True
 
     def toggle_flag(self):
         if self.state == CellState.OPEN:
             return
-        
+
         if self.state == CellState.CLOSED:
             self.state = CellState.FLAGGED
         else:
