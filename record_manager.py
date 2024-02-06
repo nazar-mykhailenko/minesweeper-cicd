@@ -2,7 +2,7 @@ import os
 from difficulty import Difficulty
 
 # Path: record_manager.py
-class RecordManager:
+class RecordManager():
     def __init__(self) -> None:
         self.FOLDER = "records"
         self.HARD_FILE = "hard.txt"
