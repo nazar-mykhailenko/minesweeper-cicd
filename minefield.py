@@ -56,7 +56,7 @@ class Minefield:
     def flag_cell(self, x, y):
         cell = self.get_cell(x, y)
         flagged_count = self.count_flagged_cells()
-        if flagged_count >= self.mine_count and cell.state == CellState.OPEN:
+        if flagged_count >= self.mine_count and cell.state == CellState.CLOSED:
             return
 
         cell.toggle_flag()
