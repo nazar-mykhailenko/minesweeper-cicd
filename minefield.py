@@ -1,5 +1,13 @@
 import random
 from cell import Cell
+from enum import Enum
+
+
+class GameState(Enum):
+    LOST = 0
+    WON = 1
+    IN_PROGRESS = 2
+
 
 class Minefield:
     def __init__(self, size, mine_count):
