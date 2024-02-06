@@ -54,8 +54,11 @@ class Minefield:
                     queue.append(point)
 
     def flag_cell(self, x, y):
-        # TODO: check if we have flags left
         cell = self.get_cell(x, y)
+        flagged_count = self.count_flagged_cells()
+        if flagged_count >= self.mine_count and cell.state == CellState.OPEN:
+            return
+
         cell.toggle_flag()
 
     def get_game_state(self) -> GameState:
@@ -98,5 +101,15 @@ class Minefield:
 
         return points
 
-    def count_cells_with_mines(self, points):
+    def count_cells_with_mines(self, points) -> int:
         return points.count(lambda p: self.get_cell(p[0], p[1]).has_mine)
+
+    def count_flagged_cells(self) -> int:
+        count = 0
+        for x in range(self.size):
+            for y in range(self.size):
+                cell = self.get_cell(x, y)
+                if cell.state == CellState.FLAGGED:
+                    count += 1
+
+        return count
