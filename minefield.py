@@ -2,17 +2,17 @@ import random
 from cell import Cell
 
 class Minefield:
-    def __init__(self, size, bomb_count):
+    def __init__(self, size, mine_count):
         self.size = size
-        self.bomb_count = bomb_count
+        self.mine_count = mine_count
         self.cells = self.initialize_cells()
 
     def initialize_cells(self):
         list = []
-        for _ in range(self.bomb_count):
+        for _ in range(self.mine_count):
             list.append(Cell(True))
 
-        for _ in range(self.size - self.bomb_count):
+        for _ in range(self.size - self.mine_count):
             list.append(Cell(False))
 
         random.shuffle(list)
