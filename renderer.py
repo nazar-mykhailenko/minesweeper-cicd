@@ -79,15 +79,20 @@ class Renderer():
         for i in range(flag_count_str.__len__()):
             sprite = self.get_number_sprite(flag_count_str[i])
             self.win.blit(sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
+
     def draw_field(self):
-        for i in range(self.field.cells.__len__()):
-            for j in range(self.field.cells[i].__len__()):
-                cell = self.field.cells[i][j]
-                self.draw_cell(cell, i, j)
+        for x in range(self.field.size):
+            for y in range(self.field.size):
+                cell = self.field.get_cell(x, y)
+                self.draw_cell(cell, x, y)
+        # for i in range(self.field.cells.__len__()):
+        #     for j in range(self.field.cells[i].__len__()):
+        #         cell = self.field.cells[i][j]
+        #         self.draw_cell(cell, i, j)
 
     def draw_cell(self, cell : Cell, i, j):
-        x = j * TILE_SIZE
-        y = i * TILE_SIZE + HEADER_SIZE
+        x = i * TILE_SIZE
+        y = j * TILE_SIZE + HEADER_SIZE
         match cell.state:
             case CellState.CLOSED:
                 self.win.blit(self.tiles.unopened, (x, y))
