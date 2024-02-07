@@ -97,4 +97,8 @@ class Renderer():
                 if cell.has_mine:
                     self.win.blit(self.tiles.mine, (x, y))
                 else:
-                    self.win.blit(self.tiles[self.field.get_number_of_mines_around_cell(i,j)], (x, y))
+                    mines_num = self.field.get_number_of_mines_around_cell(i, j) 
+                    self.win.blit(self.tiles[mines_num], (x, y))
+
+    def get_field_coords(self):
+        return (0, HEADER_SIZE, self.window_width, self.window_height - HEADER_SIZE)
