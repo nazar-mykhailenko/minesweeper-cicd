@@ -85,7 +85,7 @@ class GameManager:
 
 
     def on_menu_button_click(self, event, _):
-        if event.button == LEFT_MOUSE_BUTTON:
+        if event.button == LEFT_MOUSE_BUTTON and not self.stats_open:
             self.menu_open = True
             return True
 
@@ -93,7 +93,7 @@ class GameManager:
 
 
     def on_restart_button_click(self, event, _):
-        if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
+        if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.restart_game()
             self.menu_open = False
             return True
@@ -102,7 +102,7 @@ class GameManager:
 
 
     def on_resume_button_click(self, event, _):
-        if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
+        if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.menu_open = False
             return True
 
@@ -110,7 +110,7 @@ class GameManager:
 
 
     def on_exit_button_click(self, event, _):
-        if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
+        if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.running = False
             return True
 
@@ -118,7 +118,7 @@ class GameManager:
 
 
     def on_stats_button_click(self, event, _):
-        if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
+        if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.stats_open = True
             return True
 
@@ -126,7 +126,7 @@ class GameManager:
 
 
     def on_minefield_click(self, event, mouse_pos):
-        if self.menu_open or self.game_state != GameState.IN_PROGRESS:
+        if self.menu_open or self.stats_open or self.game_state != GameState.IN_PROGRESS:
             return False
 
         left, top, width, height = self.clickable_elements[self.on_minefield_click]
