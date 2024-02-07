@@ -8,12 +8,16 @@ class RecordManager():
         self.HARD_FILE = "hard.txt"
         self.MEDIUM_FILE = "medium.txt"
         self.EASY_FILE = "easy.txt"
+        self.MAX_RECORDS = 10
 
     def add_record(self, difficulty: Difficulty, time: int):
+        if not os.path.exists(self.FOLDER):
+            os.mkdir(self.FOLDER)
+
         file_path = self.get_file_path(difficulty)
         if not os.path.exists(file_path):
             with open(file_path, "w") as file:
-                file.write(time + '\n')
+                file.write(str(time) + '\n')
                 return
 
         self.update_records(time, file_path)
@@ -28,12 +32,15 @@ class RecordManager():
                 return os.path.join(self.FOLDER, self.HARD_FILE)
 
     def update_records(self, time : int, file_path : str):
-        with open(file_path, 'r+') as file:
+        with open(file_path, 'r') as file:
             records = file.readlines()
-            file.truncate(0)
-            records.append(str(time) + '\n')
-            records.sort()
+
+        records.append(str(time) + '\n')
+        records.sort()
+        if len(records) > self.MAX_RECORDS:
             records.pop()
+
+        with open(file_path, 'w') as file:
             file.writelines(records)
 
     def get_records(self, difficulty : Difficulty):
