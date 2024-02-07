@@ -11,26 +11,33 @@ class GameState(Enum):
 
 class Minefield:
     def __init__(self, size, mine_count):
+        self.opened = False
         self.size = size
         self.mine_count = mine_count
-        self.cells = self.initialize_cells()
+        self.cells = []
 
-    def initialize_cells(self):
-        list = []
-        for _ in range(self.mine_count):
-            list.append(Cell(True))
+    def get_random_cells(self, x, y):
+        matrix = [[Cell(False) for _ in range(self.size)] for _ in range(self.size)]
+        points_without_mines = self.get_neighboring_points(x, y)
+        points_without_mines.append((x, y))
+        mines_left = self.mine_count
+        while mines_left > 0:
+            cell_x = random.randint(0, self.size - 1)
+            cell_y = random.randint(0, self.size - 1)
+            if not matrix[cell_x][cell_y].has_mine and (cell_x, cell_y) not in points_without_mines:
+                matrix[cell_x][cell_y].has_mine = True
+                mines_left -= 1
 
-        cell_count = self.size * self.size
-        for _ in range(cell_count - self.mine_count):
-            list.append(Cell(False))
-
-        random.shuffle(list)
-        return [list[i:i+self.size] for i in range(0, len(list), self.size)]
+        return matrix
 
     def get_cell(self, x, y) -> Cell:
         return self.cells[x][y]
 
     def open_cell(self, x, y):
+        if not self.opened:
+            self.cells = self.get_random_cells(x, y)
+            self.opened = True
+
         cell = self.get_cell(x, y)
         if not cell.try_open() or cell.has_mine:
             return
@@ -55,6 +62,9 @@ class Minefield:
                     queue.append(point)
 
     def flag_cell(self, x, y):
+        if not self.opened:
+            return
+
         cell = self.get_cell(x, y)
         flagged_count = self.count_flagged_cells()
         if flagged_count >= self.mine_count and cell.state == CellState.CLOSED:
