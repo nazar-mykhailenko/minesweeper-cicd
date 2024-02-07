@@ -88,8 +88,8 @@ class GameManager:
 
         left, top, width, height = self.clickable_elements[self.on_minefield_click]
         x, y = mouse_pos
-        cell_width = (width - left) // self.minefield.size
-        cell_height = (height - top) // self.minefield.size
+        cell_width = width // self.minefield.size
+        cell_height = height // self.minefield.size
         cell_x = (x - left) // cell_width
         cell_y = (y - top) // cell_height
         self.click_cell(cell_x, cell_y, event.button)

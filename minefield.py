@@ -14,7 +14,8 @@ class Minefield:
         self.opened = False
         self.size = size
         self.mine_count = mine_count
-        self.cells = []
+        dummy_cell = Cell(False)
+        self.cells = [[dummy_cell for _ in range(size)] for _ in range(size)]
 
     def get_random_cells(self, x, y):
         matrix = [[Cell(False) for _ in range(self.size)] for _ in range(self.size)]
@@ -24,14 +25,14 @@ class Minefield:
         while mines_left > 0:
             cell_x = random.randint(0, self.size - 1)
             cell_y = random.randint(0, self.size - 1)
-            if not matrix[cell_x][cell_y].has_mine and (cell_x, cell_y) not in points_without_mines:
-                matrix[cell_x][cell_y].has_mine = True
+            if not matrix[cell_y][cell_x].has_mine and (cell_x, cell_y) not in points_without_mines:
+                matrix[cell_y][cell_x].has_mine = True
                 mines_left -= 1
 
         return matrix
 
     def get_cell(self, x, y) -> Cell:
-        return self.cells[x][y]
+        return self.cells[y][x]
 
     def open_cell(self, x, y):
         if not self.opened:
