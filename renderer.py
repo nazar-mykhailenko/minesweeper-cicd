@@ -144,6 +144,7 @@ class Renderer():
         self.draw_text('Records:', 0)
         if records is not None:
             for i in range(records.__len__()):
+                records[i] = records[i].replace('\n', '')
                 self.draw_text(records[i], i + 1)
 
     def draw_text(self, text: str, y_offset : int):
