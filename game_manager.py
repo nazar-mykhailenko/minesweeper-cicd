@@ -10,86 +10,102 @@ RIGHT_MOUSE_BUTTON = 3
 
 class GameManager:
     def __init__(self, difficulty: Difficulty):
-        self.difficulty = difficulty
-        self.minefield = Minefield(difficulty.value[0], difficulty.value[2])
-        self.game_state = GameState.IN_PROGRESS
-        self.record_manager = RecordManager()
+        self.start_time = 0
+        self.running = True
         self.menu_open = False
+        self.stats_open = False
+        self.game_state = GameState.IN_PROGRESS
+
+        self.minefield = Minefield(difficulty.value[0], difficulty.value[2])
+        self.record_manager = RecordManager()
         self.renderer = Renderer(self.minefield)
-        # Tuples should be replaced with Rects for each respective element
-        # Rects can be retrieved from the renderer which is None for now
+
         # HACK: find a better way to retrieve the Rects?
         self.clickable_elements = {
             self.on_menu_button_click: self.renderer.get_menu_button_coords(),
-            self.on_restart_button_click: (0, 0, 0, 0),
+            self.on_restart_button_click: self.renderer.get_restart_button_coords(),
             self.on_stats_button_click: (0, 0, 0, 0),
             self.on_minefield_click: self.renderer.get_field_coords(),
         }
 
     def run_game(self):
-        running = True
+        self.start_time = pygame.time.get_ticks()
         clock = pygame.time.Clock()
-        start_time = pygame.time.get_ticks()
         seconds_elapsed = 0
-        while running:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_click(event, pygame.mouse.get_pos())
 
-            self.game_state = self.minefield.get_game_state()
             clock.tick(FPS)
             if self.game_state == GameState.IN_PROGRESS:
-                seconds_elapsed = (pygame.time.get_ticks() - start_time) // 1000
+                seconds_elapsed = (pygame.time.get_ticks() - self.start_time) // 1000
 
-            self.renderer.draw(seconds_elapsed)
+            if not self.menu_open:
+                self.renderer.draw(seconds_elapsed)
+            else:
+                self.renderer.draw_menu()
+
+            self.game_state = self.minefield.get_game_state()
 
 
     def restart_game(self):
-        pass
-
-
-    def toggle_menu(self):
-        pass
-
-
-    # Not sure if this belongs here
-    def show_stats(self):
-        pass
+        self.game_state = GameState.IN_PROGRESS
+        self.start_time = pygame.time.get_ticks()
+        size = self.minefield.size
+        mine_count = self.minefield.mine_count
+        self.minefield = Minefield(size, mine_count)
+        self.renderer.field = self.minefield
 
 
     def click_cell(self, x, y, mouse_button):
         if mouse_button == LEFT_MOUSE_BUTTON:
             self.minefield.open_cell(x, y)
+            return True
         elif mouse_button == RIGHT_MOUSE_BUTTON:
             self.minefield.flag_cell(x, y)
+            return True
+
+        return False
 
 
     def handle_click(self, event, mouse_pos):
         for func, rect in self.clickable_elements.items():
             if self.is_point_in_rect(mouse_pos, rect):
-                func(event, mouse_pos)
+                if func(event, mouse_pos):
+                    break
 
 
     def on_menu_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON:
-            self.toggle_menu()
+            self.menu_open = True
+            return True
+
+        return False
 
 
     def on_restart_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
             self.restart_game()
+            self.menu_open = False
+            return True
+
+        return False
 
 
     def on_stats_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open:
-            self.show_stats()
+            self.stats_open = True
+            return True
+
+        return False
 
 
     def on_minefield_click(self, event, mouse_pos):
         if self.menu_open or self.game_state != GameState.IN_PROGRESS:
-            return
+            return False
 
         left, top, width, height = self.clickable_elements[self.on_minefield_click]
         x, y = mouse_pos
@@ -97,7 +113,7 @@ class GameManager:
         cell_height = height // self.minefield.size
         cell_x = (x - left) // cell_width
         cell_y = (y - top) // cell_height
-        self.click_cell(cell_x, cell_y, event.button)
+        return self.click_cell(cell_x, cell_y, event.button)
 
 
     def is_point_in_rect(self, point, rect):
