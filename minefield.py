@@ -103,7 +103,12 @@ class Minefield:
         return points
 
     def count_cells_with_mines(self, points) -> int:
-        return points.count(lambda p: self.get_cell(p[0], p[1]).has_mine)
+        count = 0
+        for point in points:
+            if self.get_cell(point[0], point[1]).has_mine:
+                count += 1
+
+        return count
 
     def count_flagged_cells(self) -> int:
         count = 0
