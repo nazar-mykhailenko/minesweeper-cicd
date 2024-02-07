@@ -125,6 +125,14 @@ class Renderer():
 
     def draw_menu(self):
         self.update_screen()
+        self.draw_menu_buttons()
+
+    def draw_menu_with_text(self, text: str):
+        self.update_screen()
+        self.draw_menu_buttons()
+        self.draw_text(text, 0)
+
+    def draw_menu_buttons(self):
         self.draw_restart_button()
         self.draw_exit_button()
         self.draw_resume_button()
@@ -141,7 +149,7 @@ class Renderer():
     def draw_text(self, text: str, y_offset : int):
         font = pygame.font.Font('freesansbold.ttf', 18)
         text = font.render(text, True, (0, 0, 0))
-        coords = (self.window_width // 2 - text.get_width() // 2, y_offset * text.get_height())
+        coords = (self.window_width // 2 - text.get_width() // 2, y_offset * text.get_height()+3)
         self.win.blit(text, coords)
 
     def get_restart_button_coords(self):
