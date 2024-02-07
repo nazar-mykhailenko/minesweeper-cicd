@@ -2,7 +2,6 @@ import pygame
 from minesweeper import sprites
 
 from minefield import Minefield
-pygame.init()
 TILE_SIZE = 16
 HEADER_SIZE = 100
 
@@ -69,15 +68,3 @@ class Renderer():
             self.win.blit(sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
     def draw_field(self):
         pass
-
-ren = Renderer(Minefield(10, 10))
-run = True
-timer = 0
-while run:
-    pygame.time.delay(1000)
-    ren.draw(timer)
-    timer += 1
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
