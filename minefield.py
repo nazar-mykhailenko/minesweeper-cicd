@@ -20,7 +20,8 @@ class Minefield:
         for _ in range(self.mine_count):
             list.append(Cell(True))
 
-        for _ in range(self.size - self.mine_count):
+        cell_count = self.size * self.size
+        for _ in range(cell_count - self.mine_count):
             list.append(Cell(False))
 
         random.shuffle(list)
