@@ -32,13 +32,15 @@ class RecordManager():
                 return os.path.join(self.FOLDER, self.HARD_FILE)
 
     def update_records(self, time : int, file_path : str):
-        with open(file_path, 'r+') as file:
+        with open(file_path, 'r') as file:
             records = file.readlines()
-            file.truncate(0)
-            records.append(str(time) + '\n')
-            records.sort()
-            if len(records) > self.MAX_RECORDS:
-                records.pop()
+
+        records.append(str(time) + '\n')
+        records.sort()
+        if len(records) > self.MAX_RECORDS:
+            records.pop()
+
+        with open(file_path, 'w') as file:
             file.writelines(records)
 
     def get_records(self, difficulty : Difficulty):
