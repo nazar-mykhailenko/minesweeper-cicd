@@ -1,7 +1,8 @@
 import pygame
+from cell import Cell, CellState
 from minesweeper import sprites
-
 from minefield import Minefield
+
 TILE_SIZE = 16
 HEADER_SIZE = 100
 
@@ -14,12 +15,24 @@ class Renderer():
         self.win = pygame.display.set_mode(
             (self.window_width, self.window_height))
         self.score = sprites.ScoreBuilder().build()
+        self.tiles = sprites.TileBuilder(sprites.TileSheets(sprites.TileSheets.two_thousand)).build()
 
     def draw(self, time: int):
         self.win.fill((192, 192, 192))
+        self.draw_menu_button()
         self.draw_header(time)
         self.draw_field()
         pygame.display.update()
+
+    def get_menu_button_coords(self):
+        menu_button_size = 23
+        return (self.window_width // 2 - menu_button_size//2, 10, menu_button_size, menu_button_size)
+
+    def draw_menu_button(self):
+        menu_button_coords = self.get_menu_button_coords()
+        icon_path = 'assets/menu_button.png'
+        icon = pygame.image.load(icon_path)
+        self.win.blit(icon, menu_button_coords[:2])
 
     def draw_header(self, time: int):
         self.draw_timer(time)
@@ -67,4 +80,21 @@ class Renderer():
             sprite = self.get_number_sprite(flag_count_str[i])
             self.win.blit(sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
     def draw_field(self):
-        pass
+        for i in range(self.field.cells.__len__()):
+            for j in range(self.field.cells[i].__len__()):
+                cell = self.field.cells[i][j]
+                self.draw_cell(cell, i, j)
+
+    def draw_cell(self, cell : Cell, i, j):
+        x = j * TILE_SIZE
+        y = i * TILE_SIZE + HEADER_SIZE
+        match cell.state:
+            case CellState.CLOSED:
+                self.win.blit(self.tiles.unopened, (x, y))
+            case CellState.FLAGGED:
+                self.win.blit(self.tiles.flag, (x, y))
+            case CellState.OPEN:
+                if cell.has_mine:
+                    self.win.blit(self.tiles.mine, (x, y))
+                else:
+                    self.win.blit(self.tiles[self.field.get_number_of_mines_around_cell(i,j)], (x, y))
