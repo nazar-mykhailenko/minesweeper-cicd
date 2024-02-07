@@ -85,7 +85,11 @@ class Minefield:
 
     def get_number_of_mines_around_cell(self, x, y) -> int:
         neighboring_points = self.get_neighboring_points(x, y)
-        return neighboring_points.count(lambda p: self.get_cell(p[0], p[1]).has_mine)
+        count = 0
+        for point in neighboring_points:
+            if self.get_cell(point[0], point[1]).has_mine:
+                count += 1
+        return count
 
     def get_neighboring_points(self, x, y):
         points = []
