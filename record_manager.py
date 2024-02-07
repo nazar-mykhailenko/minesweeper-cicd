@@ -13,7 +13,7 @@ class RecordManager():
         file_path = self.get_file_path(difficulty)
         if not os.path.exists(file_path):
             with open(file_path, "w") as file:
-                file.write(time + '\n')
+                file.write(str(time) + '\n')
                 return
 
         self.update_records(time, file_path)
