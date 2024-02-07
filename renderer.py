@@ -7,6 +7,7 @@ TILE_SIZE = 16
 HEADER_SIZE = 100
 MENU_BUTTON_SIZE = 56
 
+
 class Renderer():
     def __init__(self, field: Minefield) -> None:
         self.field = field
@@ -15,9 +16,12 @@ class Renderer():
         self.win = pygame.display.set_mode(
             (self.window_width, self.window_height))
         self.score = sprites.ScoreBuilder().build()
-        self.tiles = sprites.TileBuilder(sprites.TileSheets(sprites.TileSheets.two_thousand)).build()
-        self.menu_button_x_offset = (self.window_width - 2 * MENU_BUTTON_SIZE) // 3
-        self.menu_button_y_offset = (self.window_height - 2 * MENU_BUTTON_SIZE) // 3
+        self.tiles = sprites.TileBuilder(sprites.TileSheets(
+            sprites.TileSheets.two_thousand)).build()
+        self.menu_button_x_offset = (
+            self.window_width - 2 * MENU_BUTTON_SIZE) // 3
+        self.menu_button_y_offset = (
+            self.window_height - 2 * MENU_BUTTON_SIZE) // 3
 
     def draw(self, time: int):
         self.update_screen()
@@ -49,9 +53,10 @@ class Renderer():
         time_str = str(time)
         for i in range(time_str.__len__()):
             sprite = self.get_number_sprite(time_str[i])
-            self.win.blit(sprite, (timer_coords[0] + i * digit_width, timer_coords[1]))
-        
-    def get_number_sprite(self, number : str):
+            self.win.blit(
+                sprite, (timer_coords[0] + i * digit_width, timer_coords[1]))
+
+    def get_number_sprite(self, number: str):
         match number:
             case '1':
                 return self.score.one
@@ -83,7 +88,8 @@ class Renderer():
         flag_count_str = str(flag_count)[::-1]
         for i in range(flag_count_str.__len__()):
             sprite = self.get_number_sprite(flag_count_str[i])
-            self.win.blit(sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
+            self.win.blit(
+                sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
 
     def draw_field(self):
         for x in range(self.field.size):
@@ -95,7 +101,7 @@ class Renderer():
         #         cell = self.field.cells[i][j]
         #         self.draw_cell(cell, i, j)
 
-    def draw_cell(self, cell : Cell, i, j):
+    def draw_cell(self, cell: Cell, i, j):
         x = i * TILE_SIZE
         y = j * TILE_SIZE + HEADER_SIZE
         match cell.state:
@@ -107,7 +113,8 @@ class Renderer():
                 if cell.has_mine:
                     self.win.blit(self.tiles.mine, (x, y))
                 else:
-                    mines_num = self.field.get_number_of_mines_around_cell(i, j) 
+                    mines_num = self.field.get_number_of_mines_around_cell(
+                        i, j)
                     self.win.blit(self.tiles[mines_num], (x, y))
 
     def get_field_coords(self):
@@ -120,23 +127,24 @@ class Renderer():
         self.draw_resume_button()
         self.draw_stats_button()
 
-    def draw_stats(self):
+    def draw_stats(self, records: list[str]):
         self.update_screen()
-        #TODO: draw stats
 
     def get_restart_button_coords(self):
-        return (self.window_width - MENU_BUTTON_SIZE - self.menu_button_x_offset, self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+        return (self.window_width - MENU_BUTTON_SIZE - self.menu_button_x_offset, self.menu_button_y_offset,
+                 MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
 
     def get_resume_button_coords(self):
         return (self.menu_button_x_offset, self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
-    
+
     def get_exit_button_coords(self):
         return (self.window_width - MENU_BUTTON_SIZE - self.menu_button_x_offset,
-                 self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+                self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
 
     def get_stats_button_coords(self):
-        return (self.menu_button_x_offset, self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
-        
+        return (self.menu_button_x_offset, self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset,
+                 MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+
     def draw_restart_button(self):
         restart_button_coords = self.get_restart_button_coords()
         icon_path = 'assets/restart_button.png'
@@ -148,7 +156,7 @@ class Renderer():
         icon_path = 'assets/exit_button.png'
         icon = pygame.image.load(icon_path)
         self.win.blit(icon, exit_button_coords[:2])
-    
+
     def draw_resume_button(self):
         resume_button_coords = self.get_resume_button_coords()
         icon_path = 'assets/resume_button.png'

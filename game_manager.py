@@ -15,6 +15,7 @@ class GameManager:
         self.menu_open = False
         self.stats_open = False
         self.game_state = GameState.IN_PROGRESS
+        self.difficulty = difficulty
 
         self.minefield = Minefield(difficulty.value[0], difficulty.value[2])
         self.record_manager = RecordManager()
@@ -27,7 +28,7 @@ class GameManager:
             self.on_exit_button_click: self.renderer.get_exit_button_coords(),
             self.on_resume_button_click: self.renderer.get_resume_button_coords(),
             self.on_restart_button_click: self.renderer.get_restart_button_coords(),
-            self.on_stats_button_click: (0, 0, 0, 0),
+            self.on_stats_button_click: self.renderer.get_stats_button_coords(),
         }
 
     def run_game(self):
@@ -47,7 +48,7 @@ class GameManager:
 
             if self.menu_open:
                 if self.stats_open:
-                    self.renderer.draw_stats()
+                    self.renderer.draw_stats(self.record_manager.get_records(self.difficulty))
                 else:
                     self.renderer.draw_menu()
             else:
