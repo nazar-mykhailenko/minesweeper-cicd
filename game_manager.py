@@ -29,6 +29,8 @@ class GameManager:
     def run_game(self):
         running = True
         clock = pygame.time.Clock()
+        start_time = pygame.time.get_ticks()
+        seconds_elapsed = 0
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -36,9 +38,12 @@ class GameManager:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     self.handle_click(event, pygame.mouse.get_pos())
 
-            self.renderer.draw(clock.get_time())
+            self.game_state = self.minefield.get_game_state()
             clock.tick(FPS)
+            if self.game_state == GameState.IN_PROGRESS:
+                seconds_elapsed = (pygame.time.get_ticks() - start_time) // 1000
 
+            self.renderer.draw(seconds_elapsed)
 
 
     def restart_game(self):
