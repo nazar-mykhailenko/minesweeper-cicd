@@ -22,6 +22,9 @@ class Renderer():
             self.window_width - 2 * MENU_BUTTON_SIZE) // 3
         self.menu_button_y_offset = (
             self.window_height - 2 * MENU_BUTTON_SIZE) // 3
+        icon = pygame.image.load('assets/icon.png')
+        pygame.display.set_icon(icon)
+        pygame.display.set_caption('Minesweeper')
 
     def draw(self, time: int):
         self.update_screen()
