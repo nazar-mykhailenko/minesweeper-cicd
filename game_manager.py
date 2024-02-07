@@ -14,6 +14,7 @@ class GameManager:
         self.running = True
         self.menu_open = False
         self.stats_open = False
+        self.time_recorded = False
         self.game_state = GameState.IN_PROGRESS
         self.difficulty = difficulty
 
@@ -29,6 +30,7 @@ class GameManager:
             self.on_resume_button_click: self.renderer.get_resume_button_coords(),
             self.on_restart_button_click: self.renderer.get_restart_button_coords(),
             self.on_stats_button_click: self.renderer.get_stats_button_coords(),
+            self.on_back_button_click: self.renderer.get_back_button_coords()
         }
 
     def run_game(self):
@@ -45,10 +47,19 @@ class GameManager:
             clock.tick(FPS)
             if self.game_state == GameState.IN_PROGRESS:
                 seconds_elapsed = (pygame.time.get_ticks() - self.start_time) // 1000
+            else:
+                self.menu_open = True
 
             if self.menu_open:
                 if self.stats_open:
                     self.renderer.draw_stats(self.record_manager.get_records(self.difficulty))
+                elif self.game_state == GameState.WON:
+                    self.renderer.draw_menu_with_text("You won!")
+                    if not self.time_recorded:
+                        self.record_manager.add_record(self.difficulty, seconds_elapsed)
+                        self.time_recorded = True
+                elif self.game_state == GameState.LOST:
+                    self.renderer.draw_menu_with_text("You lost!")
                 else:
                     self.renderer.draw_menu()
             else:
@@ -60,6 +71,7 @@ class GameManager:
     def restart_game(self):
         self.game_state = GameState.IN_PROGRESS
         self.start_time = pygame.time.get_ticks()
+        self.time_recorded = False
         size = self.minefield.size
         mine_count = self.minefield.mine_count
         self.minefield = Minefield(size, mine_count)
@@ -120,6 +132,14 @@ class GameManager:
     def on_stats_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.stats_open = True
+            return True
+
+        return False
+
+
+    def on_back_button_click(self, event, _):
+        if event.button == LEFT_MOUSE_BUTTON and self.menu_open and self.stats_open:
+            self.stats_open = False
             return True
 
         return False
