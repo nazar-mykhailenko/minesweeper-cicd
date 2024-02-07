@@ -60,8 +60,13 @@ class Renderer():
                 return self.score.zero
 
     def draw_flags_remaining(self):
-        pass
-
+        flag_counter_coords = (self.window_width - 20, 10)
+        digit_width = 13
+        flag_count = self.field.mine_count - self.field.count_flagged_cells()
+        flag_count_str = str(flag_count)[::-1]
+        for i in range(flag_count_str.__len__()):
+            sprite = self.get_number_sprite(flag_count_str[i])
+            self.win.blit(sprite, (flag_counter_coords[0] - i * digit_width, flag_counter_coords[1]))
     def draw_field(self):
         pass
 
