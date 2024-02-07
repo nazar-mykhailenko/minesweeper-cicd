@@ -5,7 +5,7 @@ from minefield import Minefield
 
 TILE_SIZE = 16
 HEADER_SIZE = 100
-
+MENU_BUTTON_SIZE = 56
 
 class Renderer():
     def __init__(self, field: Minefield) -> None:
@@ -16,13 +16,18 @@ class Renderer():
             (self.window_width, self.window_height))
         self.score = sprites.ScoreBuilder().build()
         self.tiles = sprites.TileBuilder(sprites.TileSheets(sprites.TileSheets.two_thousand)).build()
+        self.menu_button_x_offset = (self.window_width - 2 * MENU_BUTTON_SIZE) // 3
+        self.menu_button_y_offset = (self.window_height - 2 * MENU_BUTTON_SIZE) // 3
 
     def draw(self, time: int):
-        self.win.fill((192, 192, 192))
+        self.update_screen()
         self.draw_menu_button()
         self.draw_header(time)
         self.draw_field()
+
+    def update_screen(self):
         pygame.display.update()
+        self.win.fill((192, 192, 192))
 
     def get_menu_button_coords(self):
         menu_button_size = 23
@@ -107,3 +112,51 @@ class Renderer():
 
     def get_field_coords(self):
         return (0, HEADER_SIZE, self.window_width, self.window_height - HEADER_SIZE)
+
+    def draw_menu(self):
+        self.update_screen()
+        self.draw_restart_button()
+        self.draw_exit_button()
+        self.draw_resume_button()
+        self.draw_stats_button()
+
+    def draw_stats(self):
+        self.update_screen()
+        #TODO: draw stats
+
+    def get_restart_button_coords(self):
+        return (self.window_width - MENU_BUTTON_SIZE - self.menu_button_x_offset, self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+
+    def get_resume_button_coords(self):
+        return (self.menu_button_x_offset, self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+    
+    def get_exit_button_coords(self):
+        return (self.window_width - MENU_BUTTON_SIZE - self.menu_button_x_offset,
+                 self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+
+    def get_stats_button_coords(self):
+        return (self.menu_button_x_offset, self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
+        
+    def draw_restart_button(self):
+        restart_button_coords = self.get_restart_button_coords()
+        icon_path = 'assets/restart_button.png'
+        icon = pygame.image.load(icon_path)
+        self.win.blit(icon, restart_button_coords[:2])
+
+    def draw_exit_button(self):
+        exit_button_coords = self.get_exit_button_coords()
+        icon_path = 'assets/exit_button.png'
+        icon = pygame.image.load(icon_path)
+        self.win.blit(icon, exit_button_coords[:2])
+    
+    def draw_resume_button(self):
+        resume_button_coords = self.get_resume_button_coords()
+        icon_path = 'assets/resume_button.png'
+        icon = pygame.image.load(icon_path)
+        self.win.blit(icon, resume_button_coords[:2])
+
+    def draw_stats_button(self):
+        stats_button_coords = self.get_stats_button_coords()
+        icon_path = 'assets/stats_button.png'
+        icon = pygame.image.load(icon_path)
+        self.win.blit(icon, stats_button_coords[:2])
