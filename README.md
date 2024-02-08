@@ -6,9 +6,9 @@ This game is made by Roman Davydchuk and Nazarii Mykhailenko for CI/CD course in
 
 ## Requirements
 
-[Python](https://www.python.org/downloads/) version at least 3.10
-[Pygame](https://pypi.org/project/pygame/)
-[Sprites](https://pypi.org/project/pygame-minesweeper-sprites/)
+- [Python](https://www.python.org/downloads/) version at least 3.10
+- [Pygame](https://pypi.org/project/pygame/)
+- [Sprites](https://pypi.org/project/pygame-minesweeper-sprites/)
 
 ## Setup
 
