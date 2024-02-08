@@ -36,7 +36,9 @@ class RecordManager():
             records = file.readlines()
 
         records.append(str(time) + '\n')
+        records = list(map(int, records))
         records.sort()
+        records = list(map(lambda x: str(x) + '\n', records))
         if len(records) > self.MAX_RECORDS:
             records.pop()
 
