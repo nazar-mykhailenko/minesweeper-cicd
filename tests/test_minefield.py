@@ -2,7 +2,8 @@ import sys, os
 # HACK: average python moment
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 
-from minefield import Minefield
+import pytest
+from minefield import Minefield, GameState
 from cell import Cell, CellState
 
 class TestMinefield:
@@ -57,7 +58,6 @@ class TestMinefield:
             [Cell(True), Cell(True), Cell(True), Cell(True), Cell(True)],
         ]
         minefield.opened = True
-
         # Act
         minefield.open_cell(2, 2)
         # Assert
@@ -67,3 +67,59 @@ class TestMinefield:
                     assert minefield.cells[i][j].state == CellState.OPEN
                 else:
                     assert minefield.cells[i][j].state == CellState.CLOSED
+
+
+    def test_open_cell_doesnt_open_mines(self, minefield_mine_in_corner):
+        # Act
+        minefield_mine_in_corner.open_cell(2, 2)
+        # Assert
+        for i in range(5):
+            for j in range(5):
+                if i == 0 and j == 0:
+                    assert minefield_mine_in_corner.cells[i][j].state == CellState.CLOSED
+                else:
+                    assert minefield_mine_in_corner.cells[i][j].state == CellState.OPEN
+
+
+    def test_get_game_state_returns_in_progress_when_mines_left(self, minefield_mine_in_corner):
+        # Arrange
+        minefield_mine_in_corner.open_cell(2, 2)
+        # Act
+        game_state = minefield_mine_in_corner.get_game_state()
+        # Assert
+        assert game_state == GameState.IN_PROGRESS
+
+
+    def test_get_game_state_returns_lost_when_opened_mine(self, minefield_mine_in_corner):
+        # Arrange
+        minefield_mine_in_corner.open_cell(0, 0)
+        # Act
+        game_state = minefield_mine_in_corner.get_game_state()
+        # Assert
+        assert game_state == GameState.LOST
+
+
+    def test_get_game_state_returns_won_when_no_mines_left(self, minefield_mine_in_corner):
+        # Arrange
+        minefield_mine_in_corner.open_cell(2, 2)
+        minefield_mine_in_corner.flag_cell(0, 0)
+        # Act
+        game_state = minefield_mine_in_corner.get_game_state()
+        # Assert
+        assert game_state == GameState.WON
+
+
+    @pytest.fixture
+    def minefield_mine_in_corner(self):
+        # Arrange
+        minefield = Minefield(5, 1)
+        minefield.cells = [
+            [Cell(True), Cell(False), Cell(False), Cell(False), Cell(False)],
+            [Cell(False), Cell(False), Cell(False), Cell(False), Cell(False)],
+            [Cell(False), Cell(False), Cell(False), Cell(False), Cell(False)],
+            [Cell(False), Cell(False), Cell(False), Cell(False), Cell(False)],
+            [Cell(False), Cell(False), Cell(False), Cell(False), Cell(False)],
+        ]
+        minefield.opened = True
+        return minefield
+
