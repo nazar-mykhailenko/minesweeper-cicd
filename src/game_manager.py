@@ -8,6 +8,7 @@ FPS = 60
 LEFT_MOUSE_BUTTON = 1
 RIGHT_MOUSE_BUTTON = 3
 
+
 class GameManager:
     def __init__(self, difficulty: Difficulty):
         self.start_time = 0
@@ -67,7 +68,6 @@ class GameManager:
 
             self.game_state = self.minefield.get_game_state()
 
-
     def restart_game(self):
         self.game_state = GameState.IN_PROGRESS
         self.start_time = pygame.time.get_ticks()
@@ -76,7 +76,6 @@ class GameManager:
         mine_count = self.minefield.mine_count
         self.minefield = Minefield(size, mine_count)
         self.renderer.field = self.minefield
-
 
     def click_cell(self, x, y, mouse_button):
         if mouse_button == LEFT_MOUSE_BUTTON:
@@ -88,13 +87,11 @@ class GameManager:
 
         return False
 
-
     def handle_click(self, event, mouse_pos):
         for func, rect in self.clickable_elements.items():
             if self.is_point_in_rect(mouse_pos, rect):
                 if func(event, mouse_pos):
                     break
-
 
     def on_menu_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and not self.stats_open:
@@ -102,7 +99,6 @@ class GameManager:
             return True
 
         return False
-
 
     def on_restart_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
@@ -112,14 +108,12 @@ class GameManager:
 
         return False
 
-
     def on_resume_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.menu_open = False
             return True
 
         return False
-
 
     def on_exit_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
@@ -128,7 +122,6 @@ class GameManager:
 
         return False
 
-
     def on_stats_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and not self.stats_open:
             self.stats_open = True
@@ -136,14 +129,12 @@ class GameManager:
 
         return False
 
-
     def on_back_button_click(self, event, _):
         if event.button == LEFT_MOUSE_BUTTON and self.menu_open and self.stats_open:
             self.stats_open = False
             return True
 
         return False
-
 
     def on_minefield_click(self, event, mouse_pos):
         if self.menu_open or self.stats_open or self.game_state != GameState.IN_PROGRESS:
@@ -156,7 +147,6 @@ class GameManager:
         cell_x = (x - left) // cell_width
         cell_y = (y - top) // cell_height
         return self.click_cell(cell_x, cell_y, event.button)
-
 
     def is_point_in_rect(self, point, rect):
         x, y = point

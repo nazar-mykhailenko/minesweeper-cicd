@@ -101,7 +101,6 @@ class Minefield:
 
         return GameState.IN_PROGRESS
 
-
     def get_number_of_mines_around_cell(self, x, y) -> int:
         neighboring_points = self.get_neighboring_points(x, y)
         count = 0
