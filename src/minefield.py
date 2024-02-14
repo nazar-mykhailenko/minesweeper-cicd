@@ -37,6 +37,9 @@ class Minefield:
         return matrix
 
     def get_cell(self, x, y) -> Cell:
+        if x < 0 or y < 0 or x >= self.size or y >= self.size:
+            raise IndexError("Invalid cell coordinates")
+
         return self.cells[y][x]
 
     def open_cell(self, x, y):
