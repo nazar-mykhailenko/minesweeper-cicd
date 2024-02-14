@@ -3,6 +3,7 @@ from game_manager import GameManager
 import pygame
 import argparse
 
+
 def parse_difficulty(difficulty: str) -> Difficulty:
     if difficulty == "easy":
         return Difficulty.EASY
@@ -12,6 +13,7 @@ def parse_difficulty(difficulty: str) -> Difficulty:
         return Difficulty.HARD
     else:
         return Difficulty.EASY
+
 
 parser = argparse.ArgumentParser(description="Run the game with a specified difficulty")
 parser.add_argument('-d', '--difficulty', type=str, choices=['easy', 'medium', 'hard'], help="The difficulty of the game")
