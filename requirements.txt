@@ -1,0 +1,4 @@
+flake8==7.0.0
+pygame==2.5.2
+pygame-minesweeper-sprites==1.0.41
+pytest==8.0.0
