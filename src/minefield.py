@@ -10,7 +10,12 @@ class GameState(Enum):
 
 
 class Minefield:
+    MIN_CELLS_WITHOUT_MINES = 9
+
     def __init__(self, size, mine_count):
+        if size <= 0 or mine_count < 0 or mine_count > size * size - self.MIN_CELLS_WITHOUT_MINES:
+            raise ValueError("Invalid minefield parameters")
+
         self.opened = False
         self.size = size
         self.mine_count = mine_count
