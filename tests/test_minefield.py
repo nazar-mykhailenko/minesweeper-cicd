@@ -27,6 +27,26 @@ class TestMinefield:
         assert sum(sum(cell.has_mine for cell in row) for row in minefield.cells) == expected_mines
 
 
+    @pytest.mark.parametrize("size", [0, -1])
+    def test_minefield_raises_error_when_size_is_less_then_one(self, size):
+        # Act, Assert
+        with pytest.raises(ValueError):
+            Minefield(size, 10)
+
+
+    def test_minefield_raises_error_when_mines_count_is_less_then_zero(self):
+        # Act, Assert
+        with pytest.raises(ValueError):
+            Minefield(10, -1)
+
+
+    @pytest.mark.parametrize("size, mine_count", [(10, 100 - 8), (10, 100), (10, 1000)])
+    def test_minefield_raises_error_when_too_much_mines(self, size, mine_count):
+        # Act, Assert
+        with pytest.raises(ValueError):
+            Minefield(size, mine_count)
+
+
     def test_flag_cell_flags_when_cell_closed(self):
         # Arrange
         minefield = Minefield(10, 10)
@@ -79,6 +99,15 @@ class TestMinefield:
                     assert minefield_mine_in_corner.cells[i][j].state == CellState.CLOSED
                 else:
                     assert minefield_mine_in_corner.cells[i][j].state == CellState.OPEN
+
+
+    @pytest.mark.parametrize("x, y", [(-1, 0), (0, -1), (5, 0), (0, 5)])
+    def test_open_cell_raises_error_when_out_of_bounds(self, x, y):
+        # Arrange
+        minefield = Minefield(5, 10)
+        # Act, Assert
+        with pytest.raises(IndexError):
+            minefield.open_cell(x, y)
 
 
     def test_get_game_state_returns_in_progress_when_mines_left(self, minefield_mine_in_corner):
