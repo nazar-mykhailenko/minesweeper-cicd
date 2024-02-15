@@ -38,7 +38,7 @@ class Renderer():
 
     def get_menu_button_coords(self):
         menu_button_size = 23
-        return (self.window_width // 2 - menu_button_size//2, 10, menu_button_size, menu_button_size)
+        return (self.window_width // 2 - menu_button_size // 2, 10, menu_button_size, menu_button_size)
 
     def draw_menu_button(self):
         menu_button_coords = self.get_menu_button_coords()
@@ -147,10 +147,10 @@ class Renderer():
                 records[i] = records[i].replace('\n', '')
                 self.draw_text(records[i], i + 1)
 
-    def draw_text(self, text: str, y_offset : int):
+    def draw_text(self, text: str, y_offset: int):
         font = pygame.font.Font('freesansbold.ttf', 18)
         text = font.render(text, True, (0, 0, 0))
-        coords = (self.window_width // 2 - text.get_width() // 2, y_offset * text.get_height()+3)
+        coords = (self.window_width // 2 - text.get_width() // 2, y_offset * text.get_height() + 3)
         self.win.blit(text, coords)
 
     def get_restart_button_coords(self):
@@ -167,10 +167,10 @@ class Renderer():
     def get_stats_button_coords(self):
         return (self.menu_button_x_offset, self.window_height - MENU_BUTTON_SIZE - self.menu_button_y_offset,
                  MENU_BUTTON_SIZE, MENU_BUTTON_SIZE)
-    
+
     def get_back_button_coords(self):
         button_size = 28
-        return (self.window_width // 2 - button_size//2, self.window_height - button_size - 10, button_size, button_size)
+        return (self.window_width // 2 - button_size // 2, self.window_height - button_size - 10, button_size, button_size)
 
     def draw_restart_button(self):
         restart_button_coords = self.get_restart_button_coords()
@@ -195,7 +195,7 @@ class Renderer():
         icon_path = 'assets/stats_button.png'
         icon = pygame.image.load(icon_path)
         self.win.blit(icon, stats_button_coords[:2])
-    
+
     def draw_back_button(self):
         back_button_coords = self.get_back_button_coords()
         icon_path = 'assets/back_button.png'

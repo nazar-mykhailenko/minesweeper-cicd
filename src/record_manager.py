@@ -1,6 +1,7 @@
 import os
 from difficulty import Difficulty
 
+
 # Path: record_manager.py
 class RecordManager():
     def __init__(self) -> None:
@@ -31,7 +32,7 @@ class RecordManager():
             case Difficulty.HARD:
                 return os.path.join(self.FOLDER, self.HARD_FILE)
 
-    def update_records(self, time : int, file_path : str):
+    def update_records(self, time: int, file_path: str):
         with open(file_path, 'r') as file:
             records = file.readlines()
 
@@ -45,7 +46,7 @@ class RecordManager():
         with open(file_path, 'w') as file:
             file.writelines(records)
 
-    def get_records(self, difficulty : Difficulty):
+    def get_records(self, difficulty: Difficulty):
         file_path = self.get_file_path(difficulty)
         if not os.path.exists(file_path):
             return None

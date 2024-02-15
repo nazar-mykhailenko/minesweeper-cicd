@@ -10,7 +10,12 @@ class GameState(Enum):
 
 
 class Minefield:
+    MIN_CELLS_WITHOUT_MINES = 9
+
     def __init__(self, size, mine_count):
+        if size <= 0 or mine_count < 0 or mine_count > size * size - self.MIN_CELLS_WITHOUT_MINES:
+            raise ValueError("Invalid minefield parameters")
+
         self.opened = False
         self.size = size
         self.mine_count = mine_count
@@ -32,6 +37,9 @@ class Minefield:
         return matrix
 
     def get_cell(self, x, y) -> Cell:
+        if x < 0 or y < 0 or x >= self.size or y >= self.size:
+            raise IndexError("Invalid cell coordinates")
+
         return self.cells[y][x]
 
     def open_cell(self, x, y):
@@ -92,7 +100,6 @@ class Minefield:
             return GameState.WON
 
         return GameState.IN_PROGRESS
-
 
     def get_number_of_mines_around_cell(self, x, y) -> int:
         neighboring_points = self.get_neighboring_points(x, y)
