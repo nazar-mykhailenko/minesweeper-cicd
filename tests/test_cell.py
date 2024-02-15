@@ -17,8 +17,8 @@ class TestCell:
         cell_with_mine = Cell(True)
         cell_without_mine = Cell(False)
         # Assert
-        assert cell_with_mine.has_mine == True
-        assert cell_without_mine.has_mine == False
+        assert cell_with_mine.has_mine
+        assert not cell_without_mine.has_mine
 
     def test_toggle_flag_changes_cell_state_when_cell_is_closed(self):
         # Arrange
