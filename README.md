@@ -16,7 +16,7 @@ To run this game, clone code from github and run main.py
 
 ```bash
 git clone https://github.com/nazar-mykhailenko/minesweeper-cicd.git
-cd ./minesweeper-cicd/
+cd ./minesweeper-cicd/src/
 python main.py
 ```
 
